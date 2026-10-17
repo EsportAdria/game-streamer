@@ -48,8 +48,10 @@ jobs:
           target: ${{ inputs.target }}
           build-args: ${{ inputs.mesa_version != '' && format('MESA_VERSION={0}', inputs.mesa_version) || '' }}
           tags: |
-            ghcr.io/${{ env.OWNER }}/game-streamer:latest
+            ghcr.io/${{ env.OWNER }}/game-streamer:${{ github.ref_name == 'main' && 'latest' || 'amd-live-flow' }}
             ghcr.io/${{ env.OWNER }}/game-streamer:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
           # Registry-backed cache: a dedicated :buildcache tag on ghcr stores
           # the layer cache across runs (no 10GB GHA-cache ceiling, survives
           # branch/PR boundaries). First build is a full rebuild; every
